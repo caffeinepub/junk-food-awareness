@@ -6,6 +6,7 @@ import {
   createRouter,
 } from "@tanstack/react-router";
 import Layout from "./components/Layout";
+import Calculator from "./pages/Calculator";
 import CommonJunkFoods from "./pages/CommonJunkFoods";
 import FactsStats from "./pages/FactsStats";
 import HealthRisks from "./pages/HealthRisks";
@@ -80,6 +81,12 @@ const leaderboardRoute = createRoute({
   component: Leaderboard,
 });
 
+const calculatorRoute = createRoute({
+  getParentRoute: () => layoutRoute,
+  path: "/calculator",
+  component: Calculator,
+});
+
 const routeTree = rootRoute.addChildren([
   layoutRoute.addChildren([
     homeRoute,
@@ -91,6 +98,7 @@ const routeTree = rootRoute.addChildren([
     takeActionRoute,
     quizRoute,
     leaderboardRoute,
+    calculatorRoute,
   ]),
 ]);
 

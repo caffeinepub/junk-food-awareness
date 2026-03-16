@@ -8,12 +8,21 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const QuizQuestion = IDL.Record({
+  'id' : IDL.Nat,
+  'question' : IDL.Text,
+  'fact' : IDL.Text,
+  'correct' : IDL.Nat,
+  'options' : IDL.Vec(IDL.Text),
+});
+
 export const idlService = IDL.Service({
   'getLeaderboard' : IDL.Func(
       [],
       [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat, IDL.Int))],
       [],
     ),
+  'getQuestions' : IDL.Func([], [IDL.Vec(QuizQuestion)], ['query']),
   'getSiteVisits' : IDL.Func([], [IDL.Nat], []),
   'incrementSiteVisits' : IDL.Func([], [IDL.Nat], []),
   'submitScore' : IDL.Func([IDL.Text, IDL.Nat], [], []),
@@ -22,12 +31,21 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const QuizQuestion = IDL.Record({
+    'id' : IDL.Nat,
+    'question' : IDL.Text,
+    'fact' : IDL.Text,
+    'correct' : IDL.Nat,
+    'options' : IDL.Vec(IDL.Text),
+  });
+  
   return IDL.Service({
     'getLeaderboard' : IDL.Func(
         [],
         [IDL.Vec(IDL.Tuple(IDL.Text, IDL.Nat, IDL.Int))],
         [],
       ),
+    'getQuestions' : IDL.Func([], [IDL.Vec(QuizQuestion)], ['query']),
     'getSiteVisits' : IDL.Func([], [IDL.Nat], []),
     'incrementSiteVisits' : IDL.Func([], [IDL.Nat], []),
     'submitScore' : IDL.Func([IDL.Text, IDL.Nat], [], []),

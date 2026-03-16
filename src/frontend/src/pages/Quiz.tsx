@@ -5,97 +5,20 @@ import { useActor } from "@/hooks/useActor";
 import { Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import type { QuizQuestion as RawQuizQuestion } from "../backend.d";
 
-const questions = [
-  {
-    question: "🍔 How many calories are in a McDonald's Big Mac?",
-    options: ["390 cal", "550 cal", "760 cal", "920 cal"],
-    correct: 1,
-    fact: "A Big Mac has about 550 calories — that's roughly 27% of the average adult's daily calorie needs!",
-  },
-  {
-    question: "🍜 How much sodium is in one pack of instant ramen noodles?",
-    options: ["400mg", "800mg", "1,500mg+", "3,000mg+"],
-    correct: 2,
-    fact: "Most instant ramen packs contain 1,500–2,000mg of sodium — that's nearly the entire recommended daily limit of 2,300mg!",
-  },
-  {
-    question: "🥤 What year was Coca-Cola invented?",
-    options: ["1862", "1886", "1901", "1923"],
-    correct: 1,
-    fact: "Coca-Cola was invented in 1886 by pharmacist John Stith Pemberton in Atlanta, Georgia. It originally contained cocaine from coca leaves!",
-  },
-  {
-    question: "🍟 Which fast food item has the most sodium per serving?",
-    options: [
-      "Large fries",
-      "Chicken nuggets",
-      "Crispy chicken sandwich",
-      "Large cola",
-    ],
-    correct: 2,
-    fact: "A typical crispy chicken sandwich can pack over 1,400mg of sodium — far more than fries or nuggets. Sauces and breading are sodium bombs!",
-  },
-  {
-    question: "🧁 How many teaspoons of sugar are in a can of regular soda?",
-    options: ["4 tsp", "7 tsp", "10 tsp", "13 tsp"],
-    correct: 2,
-    fact: "A 12oz can of cola contains about 10 teaspoons of sugar (39g). The WHO recommends no more than 6 teaspoons of added sugar per day for adults.",
-  },
-  {
-    question: "🫀 What do trans fats primarily do to your body?",
-    options: [
-      "Boost good cholesterol (HDL)",
-      "Lower bad cholesterol (LDL)",
-      "Raise bad cholesterol and lower good cholesterol",
-      "Increase metabolism",
-    ],
-    correct: 2,
-    fact: "Trans fats raise LDL (bad) cholesterol AND lower HDL (good) cholesterol — a double whammy for heart disease risk. They're now banned in many countries!",
-  },
-  {
-    question: "🍕 Which topping makes pizza the most calorie-dense?",
-    options: ["Extra cheese", "Pepperoni", "Sausage", "Bacon"],
-    correct: 0,
-    fact: "Extra cheese adds the most calories per serving. One extra layer of cheese on a slice can add 70–100 calories. Double cheese = almost double the fat!",
-  },
-  {
-    question:
-      "🍦 Which country consumes the most ice cream per person annually?",
-    options: ["USA", "Australia", "New Zealand", "Canada"],
-    correct: 2,
-    fact: "New Zealand tops the chart at about 28 liters per person per year! They take their ice cream very seriously Down Under. 🇳🇿",
-  },
-  {
-    question:
-      "🥔 About how many potatoes does McDonald's use globally every year?",
-    options: [
-      "1 million lbs",
-      "500 million lbs",
-      "3.4 billion lbs",
-      "10 billion lbs",
-    ],
-    correct: 2,
-    fact: "McDonald's uses roughly 3.4 billion pounds of potatoes per year — making them one of the world's largest potato buyers. That's a LOT of fries!",
-  },
-  {
-    question:
-      "🔬 What ingredient in many snack foods is linked to cancer risk when heated?",
-    options: [
-      "High-fructose corn syrup",
-      "Acrylamide",
-      "Sodium benzoate",
-      "Carrageenan",
-    ],
-    correct: 1,
-    fact: "Acrylamide forms naturally when starchy foods are cooked at high temperatures (baking, frying, roasting). It's found in chips, fries, and crackers and is classified as a probable carcinogen.",
-  },
-];
+interface QuizQuestion {
+  id: bigint;
+  question: string;
+  options: Array<string>;
+  correct: number;
+  fact: string;
+}
 
 const scoreRanks = [
   {
-    min: 10,
+    min: 9,
     title: "🏆 Junk Food Genius!",
     desc: "You know everything about the junk food world. Impressive — and a little scary.",
     color: "text-amber-500",
@@ -130,18 +53,59 @@ export default function Quiz() {
   const [score, setScore] = useState(0);
   const [direction, setDirection] = useState(1);
 
+  // Dynamic questions state
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [questionsLoading, setQuestionsLoading] = useState(true);
+  const [questionsError, setQuestionsError] = useState("");
+
   // Leaderboard submission state
   const [playerName, setPlayerName] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [submitError, setSubmitError] = useState("");
 
-  const { actor } = useActor();
+  const { actor, isFetching } = useActor();
+
+  // Fetch questions from backend
+  // Cast actor to include getQuestions (backend.ts is auto-generated and may lag behind)
+  useEffect(() => {
+    if (!actor || isFetching) return;
+    setQuestionsLoading(true);
+    setQuestionsError("");
+    const extendedActor = actor as typeof actor & {
+      getQuestions(): Promise<Array<RawQuizQuestion>>;
+    };
+    extendedActor
+      .getQuestions()
+      .then((raw) => {
+        if (!raw || raw.length === 0) {
+          setQuestionsError(
+            "No questions available right now. Please check back later.",
+          );
+        } else {
+          setQuestions(
+            raw.map((q) => ({
+              ...q,
+              correct: Number(q.correct),
+            })),
+          );
+        }
+      })
+      .catch(() => {
+        setQuestionsError(
+          "Failed to load quiz questions. Please refresh and try again.",
+        );
+      })
+      .finally(() => {
+        setQuestionsLoading(false);
+      });
+  }, [actor, isFetching]);
 
   const question = questions[current];
-  const progress = (current / questions.length) * 100;
+  const progress =
+    questions.length > 0 ? (current / questions.length) * 100 : 0;
 
   function handleAnswer(idx: number) {
-    if (selected !== null) return;
+    if (selected !== null || !question) return;
     setSelected(idx);
     if (idx === question.correct) setScore((s) => s + 1);
   }
@@ -189,6 +153,56 @@ export default function Quiz() {
     exit: (dir: number) => ({ x: dir * -60, opacity: 0 }),
   };
 
+  // Loading state
+  if (questionsLoading || isFetching) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <motion.div
+          data-ocid="quiz.loading_state"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <Loader2 className="w-12 h-12 animate-spin text-vermillion-500 mx-auto mb-4" />
+          <p className="text-charcoal-600 text-lg font-medium">
+            Loading quiz questions…
+          </p>
+          <p className="text-charcoal-400 text-sm mt-1">
+            Fetching from the network
+          </p>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Error / empty state
+  if (questionsError || questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <motion.div
+          data-ocid="quiz.error_state"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-md"
+        >
+          <div className="text-5xl mb-4">🤔</div>
+          <h2 className="font-display text-2xl font-bold text-charcoal-900 mb-3">
+            Quiz Unavailable
+          </h2>
+          <p className="text-charcoal-600 mb-6">
+            {questionsError || "No questions are available right now."}
+          </p>
+          <Button
+            onClick={() => window.location.reload()}
+            className="bg-vermillion-500 hover:bg-vermillion-600 text-white font-bold rounded-xl px-8"
+          >
+            Try Again
+          </Button>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-2xl mx-auto">
@@ -207,13 +221,13 @@ export default function Quiz() {
             <span className="text-vermillion-500">Junk Food?</span>
           </h1>
           <p className="mt-3 text-charcoal-600 text-lg max-w-lg mx-auto">
-            10 questions. No cheating. Find out if you're a snack scholar or a
-            junk food rookie.
+            {questions.length} questions. No cheating. Find out if you’re a
+            snack scholar or a junk food rookie.
           </p>
         </motion.div>
 
         <AnimatePresence mode="wait" custom={direction}>
-          {phase === "quiz" && (
+          {phase === "quiz" && question && (
             <motion.div
               key="quiz"
               custom={direction}
@@ -371,7 +385,7 @@ export default function Quiz() {
                   {score}
                 </span>
                 <span className="text-sm text-charcoal-500 font-medium">
-                  out of 10
+                  out of {questions.length}
                 </span>
               </motion.div>
 
@@ -401,7 +415,7 @@ export default function Quiz() {
                   </div>
                   <div className="bg-red-50 rounded-xl px-6 py-4 border border-red-200">
                     <div className="font-display text-2xl font-bold text-red-600">
-                      {10 - score}
+                      {questions.length - score}
                     </div>
                     <div className="text-xs text-red-500 font-medium mt-1">
                       Incorrect
@@ -409,7 +423,10 @@ export default function Quiz() {
                   </div>
                   <div className="bg-secondary rounded-xl px-6 py-4 border border-border">
                     <div className="font-display text-2xl font-bold text-charcoal-800">
-                      {Math.round((score / 10) * 100)}%
+                      {questions.length > 0
+                        ? Math.round((score / questions.length) * 100)
+                        : 0}
+                      %
                     </div>
                     <div className="text-xs text-charcoal-500 font-medium mt-1">
                       Accuracy

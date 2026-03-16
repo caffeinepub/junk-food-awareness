@@ -10,8 +10,16 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface QuizQuestion {
+  'id' : bigint,
+  'question' : string,
+  'fact' : string,
+  'correct' : bigint,
+  'options' : Array<string>,
+}
 export interface _SERVICE {
   'getLeaderboard' : ActorMethod<[], Array<[string, bigint, bigint]>>,
+  'getQuestions' : ActorMethod<[], Array<QuizQuestion>>,
   'getSiteVisits' : ActorMethod<[], bigint>,
   'incrementSiteVisits' : ActorMethod<[], bigint>,
   'submitScore' : ActorMethod<[string, bigint], undefined>,

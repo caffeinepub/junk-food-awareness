@@ -20,6 +20,7 @@ const navItems = [
   { to: "/facts-stats", label: "Facts & Stats", ocid: "nav.facts-stats.link" },
   { to: "/ingredients", label: "Ingredients", ocid: "nav.ingredients.link" },
   { to: "/take-action", label: "Take Action", ocid: "nav.take-action.link" },
+  { to: "/calculator", label: "Calculator 🧮", ocid: "nav.calculator.link" },
   { to: "/quiz", label: "Quiz", ocid: "nav.quiz.link" },
   { to: "/leaderboard", label: "Leaderboard 🏆", ocid: "nav.leaderboard.link" },
 ];
