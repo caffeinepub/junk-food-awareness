@@ -68,10 +68,10 @@ export default function Leaderboard() {
             <Trophy className="w-4 h-4" />
             Hall of Fame
           </span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-charcoal-900 leading-tight">
+          <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 leading-tight">
             Quiz <span className="text-vermillion-500">Leaderboard</span>
           </h1>
-          <p className="mt-3 text-charcoal-600 text-lg max-w-lg mx-auto">
+          <p className="mt-3 text-charcoal-600 text-base md:text-lg max-w-lg mx-auto">
             The top junk food scholars, ranked by quiz score. Think you can beat
             them?
           </p>
@@ -120,96 +120,98 @@ export default function Leaderboard() {
               </Link>
             </div>
           ) : (
-            <Table data-ocid="leaderboard.table">
-              <TableHeader>
-                <TableRow className="bg-charcoal-900 hover:bg-charcoal-900">
-                  <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest w-16 text-center">
-                    Rank
-                  </TableHead>
-                  <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest">
-                    Player
-                  </TableHead>
-                  <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-center">
-                    Score
-                  </TableHead>
-                  <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-center">
-                    Accuracy
-                  </TableHead>
-                  <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-right hidden sm:table-cell">
-                    Date
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sorted.map((entry, i) => {
-                  const rank = i + 1;
-                  const name = entry[0];
-                  const score = Number(entry[1]);
-                  const ts = entry[2];
-                  const accuracy = Math.round((score / 10) * 100);
-                  const isTop3 = rank <= 3;
-                  return (
-                    <motion.tr
-                      key={`${name}-${Number(entry[1])}-${Number(entry[2])}`}
-                      data-ocid={`leaderboard.row.${rank}`}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: 0.1 + i * 0.04 }}
-                      className={`border-b border-border last:border-b-0 ${
-                        isTop3
-                          ? "bg-vermillion-50 hover:bg-vermillion-100/60"
-                          : "hover:bg-secondary/60"
-                      }`}
-                    >
-                      <TableCell className="text-center font-bold text-lg py-4">
-                        {isTop3 ? (
-                          <span className="text-xl">{medalFor(rank)}</span>
-                        ) : (
-                          <span className="text-charcoal-600 text-sm font-semibold">
-                            {rank}
+            <div className="overflow-x-auto">
+              <Table data-ocid="leaderboard.table">
+                <TableHeader>
+                  <TableRow className="bg-charcoal-900 hover:bg-charcoal-900">
+                    <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest w-16 text-center">
+                      Rank
+                    </TableHead>
+                    <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest">
+                      Player
+                    </TableHead>
+                    <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-center">
+                      Score
+                    </TableHead>
+                    <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-center">
+                      Accuracy
+                    </TableHead>
+                    <TableHead className="text-charcoal-100 font-bold text-xs uppercase tracking-widest text-right hidden sm:table-cell">
+                      Date
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {sorted.map((entry, i) => {
+                    const rank = i + 1;
+                    const name = entry[0];
+                    const score = Number(entry[1]);
+                    const ts = entry[2];
+                    const accuracy = Math.round((score / 10) * 100);
+                    const isTop3 = rank <= 3;
+                    return (
+                      <motion.tr
+                        key={`${name}-${Number(entry[1])}-${Number(entry[2])}`}
+                        data-ocid={`leaderboard.row.${rank}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 + i * 0.04 }}
+                        className={`border-b border-border last:border-b-0 ${
+                          isTop3
+                            ? "bg-vermillion-50 hover:bg-vermillion-100/60"
+                            : "hover:bg-secondary/60"
+                        }`}
+                      >
+                        <TableCell className="text-center font-bold text-lg py-4">
+                          {isTop3 ? (
+                            <span className="text-xl">{medalFor(rank)}</span>
+                          ) : (
+                            <span className="text-charcoal-600 text-sm font-semibold">
+                              {rank}
+                            </span>
+                          )}
+                        </TableCell>
+                        <TableCell className="font-semibold text-charcoal-900 py-4">
+                          {name}
+                        </TableCell>
+                        <TableCell className="text-center py-4">
+                          <span
+                            className={`inline-block font-bold text-base ${
+                              score >= 8
+                                ? "text-green-600"
+                                : score >= 5
+                                  ? "text-amber-500"
+                                  : "text-vermillion-500"
+                            }`}
+                          >
+                            {score}
+                            <span className="text-charcoal-400 font-normal text-sm">
+                              /10
+                            </span>
                           </span>
-                        )}
-                      </TableCell>
-                      <TableCell className="font-semibold text-charcoal-900 py-4">
-                        {name}
-                      </TableCell>
-                      <TableCell className="text-center py-4">
-                        <span
-                          className={`inline-block font-bold text-base ${
-                            score >= 8
-                              ? "text-green-600"
-                              : score >= 5
-                                ? "text-amber-500"
-                                : "text-vermillion-500"
-                          }`}
-                        >
-                          {score}
-                          <span className="text-charcoal-400 font-normal text-sm">
-                            /10
+                        </TableCell>
+                        <TableCell className="text-center py-4">
+                          <span
+                            className={`text-sm font-semibold px-2.5 py-0.5 rounded-full ${
+                              accuracy >= 80
+                                ? "bg-green-100 text-green-700"
+                                : accuracy >= 50
+                                  ? "bg-amber-100 text-amber-700"
+                                  : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {accuracy}%
                           </span>
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-center py-4">
-                        <span
-                          className={`text-sm font-semibold px-2.5 py-0.5 rounded-full ${
-                            accuracy >= 80
-                              ? "bg-green-100 text-green-700"
-                              : accuracy >= 50
-                                ? "bg-amber-100 text-amber-700"
-                                : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {accuracy}%
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right text-sm text-charcoal-500 py-4 hidden sm:table-cell">
-                        {formatDate(ts)}
-                      </TableCell>
-                    </motion.tr>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                        </TableCell>
+                        <TableCell className="text-right text-sm text-charcoal-500 py-4 hidden sm:table-cell">
+                          {formatDate(ts)}
+                        </TableCell>
+                      </motion.tr>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </motion.div>
       </div>

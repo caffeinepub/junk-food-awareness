@@ -216,12 +216,12 @@ export default function Quiz() {
           <span className="inline-block bg-vermillion-500/10 text-vermillion-500 text-sm font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4 border border-vermillion-500/20">
             Junk Food Quiz
           </span>
-          <h1 className="font-display text-4xl md:text-5xl font-bold text-charcoal-900 leading-tight">
+          <h1 className="font-display text-3xl md:text-4xl lg:text-5xl font-bold text-charcoal-900 leading-tight">
             How Well Do You Know{" "}
             <span className="text-vermillion-500">Junk Food?</span>
           </h1>
-          <p className="mt-3 text-charcoal-600 text-lg max-w-lg mx-auto">
-            {questions.length} questions. No cheating. Find out if you’re a
+          <p className="mt-3 text-charcoal-600 text-base md:text-lg max-w-lg mx-auto">
+            {questions.length} questions. No cheating. Find out if you're a
             snack scholar or a junk food rookie.
           </p>
         </motion.div>
@@ -263,16 +263,16 @@ export default function Quiz() {
                   animate="center"
                   exit="exit"
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="bg-white rounded-2xl border border-border shadow-md p-6 md:p-8"
+                  className="bg-white rounded-2xl border border-border shadow-md p-5 md:p-8"
                 >
-                  <h2 className="font-display text-2xl md:text-3xl font-bold text-charcoal-900 mb-8 leading-snug">
+                  <h2 className="font-display text-xl md:text-2xl lg:text-3xl font-bold text-charcoal-900 mb-6 md:mb-8 leading-snug">
                     {question.question}
                   </h2>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                     {question.options.map((option, idx) => {
                       let btnClass =
-                        "w-full text-left px-5 py-4 rounded-xl border-2 font-medium text-base transition-all duration-200 ";
+                        "w-full text-left px-4 py-3 md:px-5 md:py-4 rounded-xl border-2 font-medium text-sm md:text-base transition-all duration-200 ";
 
                       if (selected === null) {
                         btnClass +=
@@ -300,8 +300,8 @@ export default function Quiz() {
                           whileHover={selected === null ? { scale: 1.02 } : {}}
                           whileTap={selected === null ? { scale: 0.98 } : {}}
                         >
-                          <span className="inline-flex items-center gap-3">
-                            <span className="w-7 h-7 rounded-full bg-border text-charcoal-600 text-xs font-bold flex items-center justify-center shrink-0">
+                          <span className="inline-flex items-center gap-2 md:gap-3">
+                            <span className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-border text-charcoal-600 text-xs font-bold flex items-center justify-center shrink-0">
                               {["A", "B", "C", "D"][idx]}
                             </span>
                             {option}
@@ -367,7 +367,7 @@ export default function Quiz() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="bg-white rounded-2xl border border-border shadow-lg p-8 md:p-12 text-center"
+              className="bg-white rounded-2xl border border-border shadow-lg p-6 md:p-12 text-center"
             >
               {/* Score circle */}
               <motion.div
@@ -379,12 +379,12 @@ export default function Quiz() {
                   damping: 15,
                   delay: 0.2,
                 }}
-                className="mx-auto mb-6 w-32 h-32 rounded-full bg-vermillion-500/10 border-4 border-vermillion-500 flex flex-col items-center justify-center"
+                className="mx-auto mb-6 w-28 h-28 md:w-32 md:h-32 rounded-full bg-vermillion-500/10 border-4 border-vermillion-500 flex flex-col items-center justify-center"
               >
-                <span className="font-display text-4xl font-bold text-vermillion-500">
+                <span className="font-display text-3xl md:text-4xl font-bold text-vermillion-500">
                   {score}
                 </span>
-                <span className="text-sm text-charcoal-500 font-medium">
+                <span className="text-xs md:text-sm text-charcoal-500 font-medium">
                   out of {questions.length}
                 </span>
               </motion.div>
@@ -395,17 +395,17 @@ export default function Quiz() {
                 transition={{ delay: 0.4 }}
               >
                 <h2
-                  className={`font-display text-3xl md:text-4xl font-bold mb-3 ${rank.color}`}
+                  className={`font-display text-2xl md:text-3xl lg:text-4xl font-bold mb-3 ${rank.color}`}
                 >
                   {rank.title}
                 </h2>
-                <p className="text-charcoal-600 text-lg max-w-md mx-auto mb-8">
+                <p className="text-charcoal-600 text-base md:text-lg max-w-md mx-auto mb-8">
                   {rank.desc}
                 </p>
 
                 {/* Score breakdown */}
-                <div className="flex justify-center gap-6 mb-8">
-                  <div className="bg-green-50 rounded-xl px-6 py-4 border border-green-200">
+                <div className="flex flex-wrap justify-center gap-3 md:gap-6 mb-8">
+                  <div className="bg-green-50 rounded-xl px-4 md:px-6 py-4 border border-green-200">
                     <div className="font-display text-2xl font-bold text-green-700">
                       {score}
                     </div>
@@ -413,7 +413,7 @@ export default function Quiz() {
                       Correct
                     </div>
                   </div>
-                  <div className="bg-red-50 rounded-xl px-6 py-4 border border-red-200">
+                  <div className="bg-red-50 rounded-xl px-4 md:px-6 py-4 border border-red-200">
                     <div className="font-display text-2xl font-bold text-red-600">
                       {questions.length - score}
                     </div>
@@ -421,7 +421,7 @@ export default function Quiz() {
                       Incorrect
                     </div>
                   </div>
-                  <div className="bg-secondary rounded-xl px-6 py-4 border border-border">
+                  <div className="bg-secondary rounded-xl px-4 md:px-6 py-4 border border-border">
                     <div className="font-display text-2xl font-bold text-charcoal-800">
                       {questions.length > 0
                         ? Math.round((score / questions.length) * 100)
@@ -435,7 +435,7 @@ export default function Quiz() {
                 </div>
 
                 {/* Leaderboard submission */}
-                <div className="border border-border rounded-xl p-6 mb-6 text-left">
+                <div className="border border-border rounded-xl p-5 md:p-6 mb-6 text-left">
                   <h3 className="font-display text-lg font-bold text-charcoal-900 mb-1">
                     Submit to Leaderboard
                   </h3>

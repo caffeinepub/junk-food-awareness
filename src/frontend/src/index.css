@@ -90,6 +90,13 @@
   }
 }
 
+/* Prevent horizontal scroll on all devices */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 /* Stat card pulse animation */
 @keyframes pulse-soft {
   0%,

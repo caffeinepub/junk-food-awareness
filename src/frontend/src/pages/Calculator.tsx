@@ -459,7 +459,7 @@ export default function Calculator() {
                               className="absolute top-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-charcoal-900 rounded-full shadow-md -ml-2"
                             />
                           </div>
-                          <div className="flex justify-between text-xs text-muted-foreground mt-1 font-medium">
+                          <div className="flex justify-between text-[10px] sm:text-xs text-muted-foreground mt-1 font-medium">
                             <span>Underweight</span>
                             <span>Normal</span>
                             <span>Overweight</span>

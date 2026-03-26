@@ -118,7 +118,7 @@ export default function Home() {
   return (
     <div>
       {/* Hero */}
-      <section className="relative min-h-[520px] flex items-center overflow-hidden">
+      <section className="relative min-h-[420px] md:min-h-[520px] flex items-center overflow-hidden">
         <img
           src="/assets/generated/hero-junkfood.dim_1200x500.jpg"
           alt="Array of junk food"
@@ -149,7 +149,7 @@ export default function Home() {
           />
         ))}
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-24">
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ export default function Home() {
               Public Health Awareness
             </motion.span>
 
-            <h1 className="text-5xl md:text-6xl font-display font-black text-white leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-black text-white leading-tight mb-4">
               <span className="block">
                 {heroWords.map((word, i) => (
                   <motion.span
@@ -209,7 +209,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.5 }}
-              className="text-lg text-white/85 mb-8 leading-relaxed"
+              className="text-base md:text-lg text-white/85 mb-8 leading-relaxed"
             >
               Junk food is engineered to be irresistible — but the hidden cost
               is devastating. Explore the science, the statistics, and the
@@ -260,7 +260,7 @@ export default function Home() {
                 transition={{ delay: i * 0.1, duration: 0.5 }}
                 className="text-center cursor-default"
               >
-                <p className="text-3xl md:text-4xl font-display font-black text-vermillion-400 stat-pulse">
+                <p className="text-2xl md:text-3xl lg:text-4xl font-display font-black text-vermillion-400 stat-pulse">
                   {stat.value}
                 </p>
                 <p className="text-xs text-charcoal-100 mt-1 leading-snug">
@@ -275,16 +275,16 @@ export default function Home() {
       {/* Intro */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="max-w-2xl">
-          <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-4">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-foreground mb-4">
             The Junk Food Problem Is Bigger Than You Think
           </h2>
-          <p className="text-muted-foreground text-lg leading-relaxed mb-4">
+          <p className="text-muted-foreground text-base md:text-lg leading-relaxed mb-4">
             Ultra-processed foods now make up over 60% of the average American
             diet. These products are deliberately designed — with precise
             combinations of sugar, fat, and salt — to override the brain's
             natural satiety signals.
           </p>
-          <p className="text-muted-foreground text-lg leading-relaxed">
+          <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
             The consequences extend far beyond weight gain: chronic
             inflammation, addiction-like eating patterns, metabolic disease, and
             mental health disorders. Understanding the problem is the first step
@@ -304,7 +304,7 @@ export default function Home() {
           >
             Did You Know?
           </motion.p>
-          <div className="relative h-24 sm:h-20">
+          <div className="relative h-28 sm:h-20">
             <AnimatePresence mode="wait">
               <motion.div
                 key={factIndex}
@@ -314,7 +314,7 @@ export default function Home() {
                 transition={{ duration: 0.45, ease: "easeInOut" }}
                 className="absolute inset-0 flex items-center justify-center px-4"
               >
-                <p className="text-white text-lg sm:text-xl font-medium text-center leading-snug">
+                <p className="text-white text-base sm:text-lg md:text-xl font-medium text-center leading-snug">
                   {didYouKnowFacts[factIndex]}
                 </p>
               </motion.div>
